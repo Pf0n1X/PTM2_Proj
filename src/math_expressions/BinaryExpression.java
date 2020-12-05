@@ -1,4 +1,4 @@
-package expressions;
+package math_expressions;
 
 public abstract class BinaryExpression implements Expression {
 	

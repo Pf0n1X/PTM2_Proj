@@ -1,4 +1,4 @@
-package expressions;
+package math_expressions;
 
 public class Minus extends BinaryExpression {
 
