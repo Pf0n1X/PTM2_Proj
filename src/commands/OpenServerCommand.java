@@ -9,9 +9,7 @@ public class OpenServerCommand implements Command {
 	private Expression rate;
 	
 	// Constructors
-	public OpenServerCommand(Expression port, Expression rate) {
-		this.setPort(port);
-		this.setRate(rate);
+	public OpenServerCommand() {
 	}
 	
 	// Getters & Setters

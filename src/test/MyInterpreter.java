@@ -1,9 +1,12 @@
 package test;
 
+import interpreter.Interpreter;
+
 public class MyInterpreter {
 
-	public static  int interpret(String[] lines){
-		// call your interpreter here
-		return 0;
+	public static int interpret(String[] lines){
+		
+		Interpreter interpeter = new Interpreter();
+		return (int)interpeter.interpret(lines);
 	}
 }
