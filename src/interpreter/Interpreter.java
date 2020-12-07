@@ -22,7 +22,6 @@ import symbols.SymbolTable;
 public class Interpreter {
 	
 	// Data Members
-	private HashMap<String, Command> commandMap;
 	private SymbolTable symbolTable;
 	private int tokenIndex;
 	private int tokenBlockIndex;
@@ -109,20 +108,6 @@ public class Interpreter {
 	 */
 	public void setTokens(ArrayList<String[]> tokens) {
 		this.tokens = tokens;
-	}
-
-	/**
-	 * @return the commandMap
-	 */
-	public HashMap<String, Command> getCommandMap() {
-		return commandMap;
-	}
-
-	/**
-	 * @param commandMap the commandMap to set
-	 */
-	public void setCommandMap(HashMap<String, Command> commandMap) {
-		this.commandMap = commandMap;
 	}
 
 	/**
