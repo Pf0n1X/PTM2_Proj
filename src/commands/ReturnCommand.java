@@ -1,30 +1,37 @@
 package commands;
 
 import java.util.ArrayList;
+
+import interpreter.Interpreter;
+import interpreter.ShuntingYard;
 import math_expressions.Expression;
 
-public class ReturnCommand implements Command {
+public class ReturnCommand extends Command {
 	
 	// Data Members
 	private Expression exp;
 	
 	// Constructors
-	private ReturnCommand() {
-		
+	private ReturnCommand(Interpreter interpreter) {
+		super(interpreter);
 	}
 	
 	// Methods
 	@Override
 	public int execute() {
-		return 0;
-	}
-	
-	// SubClasses
-	public class Builder extends CommandBuilder {
+		int indexToken = this.interpreter.getTokenIndex();
+		String[] block = this.interpreter.getTokens().get(this.interpreter.getTokenBlockIndex());
+		ArrayList<String> expression = new ArrayList<String>();
 
-		@Override
-		public Command build(ArrayList<String> args) {
-			return new ReturnCommand();
-		}	
+		for (int i = (indexToken + 1); i < block.length; i++) {
+			expression.add(block[i]);
+		}
+
+		this.interpreter
+				.setReturnedValue(ShuntingYard.execute(expression, this.interpreter.getServerSymbolTable()));
+
+		this.interpreter.setTokenIndex(expression.size() + this.interpreter.getTokenIndex());
+
+		return 0;
 	}
 }

@@ -5,7 +5,7 @@ import interpreter.Interpreter;
 public abstract class Command {
 	
 	// Data Members
-	private Interpreter interpreter;
+   protected Interpreter interpreter;
 	
 	// Constructors
 	public Command(Interpreter interpreter) {
@@ -14,7 +14,7 @@ public abstract class Command {
 	
 	// Methods
 	// TODO: Might need to add parameters.
-	public abstract int execute(String[] args);
+	public abstract int execute();
 
 	// Getters & Setters
 	/**

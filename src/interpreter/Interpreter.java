@@ -9,6 +9,7 @@ import javax.sound.sampled.Line;
 
 import commands.Command;
 import commands.CommandBuilder;
+import commands.CommandFactory;
 import commands.DefineVarCommand;
 import commands.IfCommand;
 import commands.OpenServerCommand;
@@ -23,20 +24,21 @@ public class Interpreter {
 	
 	// Data Members
 	private SymbolTable symbolTable;
+	private CommandBuilder commandBuilder;
+	private ArrayList<String[]> tokens;
+	private double returnedValue;
 	private int tokenIndex;
 	private int tokenBlockIndex;
-	private double returnedValue;
-	private ArrayList<String[]> tokens;
-	private CommandBuilder commandBuilder;
-	
-	// Constant Members
-	private static final String lexerMatch = "(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|-?\\d+\\.?\\d*|-?\\d*\\.?\\d+|\".*\"|==|!=|<=|>=|<|>|\\+|-|\\*|\\/|&&|\\|\\||!|=|\\(|\\)|\\{|\\}|\\w+)";
-	
+	private HashMap<String, SymbolTable> simulatorSymbolTable;
+
 	// Constructors
 	public Interpreter() {
-		
-		// Initialize the command map.
-		this.setCommandBuilder(new CommandBuilder(this));
+		this.simulatorSymbolTable = new HashMap<String, SymbolTable>();
+		this.tokens = new ArrayList<String[]>();
+		this.commandBuilder = new CommandBuilder(this);
+		this.returnedValue = 0;
+		this.tokenIndex = 0;
+		this.tokenBlockIndex = 0;
 	}
 
 	// Getters & Setters
@@ -157,7 +159,7 @@ public class Interpreter {
 			for (tokenIndex = 0; tokenIndex < tokens.get(tokenBlockIndex).length; tokenIndex++) {
 				System.out.println("T1");
 				System.out.println(tokens.get(tokenBlockIndex)[tokenIndex]);
-				Command command = this.getCommandMap().get(tokens.get(tokenBlockIndex)[tokenIndex]);
+				Command command = this.getCommandBuilder().getCommand(tokens.get(tokenBlockIndex)[tokenIndex]);
 				
 				if (command != null) {
 					
