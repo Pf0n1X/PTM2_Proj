@@ -2,10 +2,10 @@ package math_expressions;
 
 import commands.ConnectCommand;
 
-public class SimulatorVariable extends Variable {
+public class SimulatorSymbolVariable extends Variable {
 	
 	// Constructors
-	public SimulatorVariable(String key, double val) {
+	public SimulatorSymbolVariable(String key, double val) {
 		super(key, val);
 	}
 	

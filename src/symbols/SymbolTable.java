@@ -6,14 +6,14 @@ import Exceptions.Exception.SymbolAlreadyExistsException;
 import Exceptions.Exception.SymbolUnInitializedException;
 public class SymbolTable {
 	private double returnValue = 0.0D;
-	private HashMap<String, Symbol> symTable;
+	private HashMap<String, Variable> symTable;
 
 	public SymbolTable() {
 		this.symTable = new HashMap<>();
 	}
 
 	// Returns a specific symbol from the table by it's name.
-	public Symbol getSymbol(String s) {
+	public Variable getSymbol(String s) {
 		if (!this.symTable.containsKey(s))
 			;
 		return this.symTable.get(s);
@@ -21,17 +21,17 @@ public class SymbolTable {
 	
 	  
 	  // Adds a new symbol to the table.
-	  public void addSymbol(final String s, Symbol sym) throws SymbolAlreadyExistsException  {
+	  public void addSymbol(final String s, Variable sym) throws SymbolAlreadyExistsException  {
 	
-	    if (this.symTable.containsKey(s) && ((Symbol)this.symTable.get(s)).isInitialized()) 
+	    if (this.symTable.containsKey(s) && ((Variable)this.symTable.get(s)).isInitialized()) 
 	    	throw new Exception.SymbolAlreadyExistsException(s); 
 	    
-	    if (this.symTable.containsKey(s) && !((Symbol)this.symTable.get(s)).isInitialized())
+	    if (this.symTable.containsKey(s) && !((Variable)this.symTable.get(s)).isInitialized())
 	    	removeSymbol(s); 
 	    if (sym == null) {
 	    	
 	      // Creates a new generic symbol to be added.
-	      sym = new Symbol() {
+	      sym = new Variable() {
 	    	  
 	          public void setValue(double val) {
 	            RegularSymbol newSymbol = new RegularSymbol(s);
