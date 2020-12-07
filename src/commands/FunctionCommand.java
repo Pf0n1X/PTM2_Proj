@@ -2,7 +2,7 @@ package commands;
 
 import java.util.ArrayList;
 
-public class FunctionCommand implements Command {
+public class FunctionCommand extends Command {
 	
 	// Data Members
 	private ArrayList<Command> commands;
