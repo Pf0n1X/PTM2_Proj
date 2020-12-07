@@ -5,22 +5,21 @@ import java.util.HashMap;
 import commands.Command;
 import commands.CommandBuilder;
 import math_expressions.CommandExpression;
-import symbols.SymbolTable;
+import math_expressions.Variable;
 
 public class Interpreter {
 	
 	// Data Members
-	private SymbolTable symbolTable;
 	private CommandBuilder commandBuilder;
 	private ArrayList<String[]> tokens;
 	private double returnedValue;
 	private int tokenIndex;
 	private int tokenBlockIndex;
-	private HashMap<String, SymbolTable> serverSymbolTable;
+	private HashMap<String, Variable> serverSymbolTable;
 
 	// Constructors
 	public Interpreter() {
-		this.setServerSymbolTable(new HashMap<String, SymbolTable>());
+		this.setServerSymbolTable(new HashMap<String, Variable>());
 		this.tokens = new ArrayList<String[]>();
 		this.commandBuilder = new CommandBuilder(this);
 		this.returnedValue = 0;
@@ -98,32 +97,18 @@ public class Interpreter {
 	public void setTokens(ArrayList<String[]> tokens) {
 		this.tokens = tokens;
 	}
-
-	/**
-	 * @return the symbolTable
-	 */
-	public SymbolTable getSymbolTable() {
-		return symbolTable;
-	}
-
-	/**
-	 * @param symbolTable the symbolTable to set
-	 */
-	public void setSymbolTable(SymbolTable symbolTable) {
-		this.symbolTable = symbolTable;
-	}
 	
 	/**
 	 * @return the serverSymbolTable
 	 */
-	public HashMap<String, SymbolTable> getServerSymbolTable() {
+	public HashMap<String, Variable> getServerSymbolTable() {
 		return serverSymbolTable;
 	}
 
 	/**
 	 * @param serverSymbolTable the simulatorSymbolTable to set
 	 */
-	public void setServerSymbolTable(HashMap<String, SymbolTable> serverSymbolTable) {
+	public void setServerSymbolTable(HashMap<String, Variable> serverSymbolTable) {
 		this.serverSymbolTable = serverSymbolTable;
 	}
 	
