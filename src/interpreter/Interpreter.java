@@ -16,11 +16,11 @@ public class Interpreter {
 	private double returnedValue;
 	private int tokenIndex;
 	private int tokenBlockIndex;
-	private HashMap<String, SymbolTable> simulatorSymbolTable;
+	private HashMap<String, SymbolTable> serverSymbolTable;
 
 	// Constructors
 	public Interpreter() {
-		this.simulatorSymbolTable = new HashMap<String, SymbolTable>();
+		this.setServerSymbolTable(new HashMap<String, SymbolTable>());
 		this.tokens = new ArrayList<String[]>();
 		this.commandBuilder = new CommandBuilder(this);
 		this.returnedValue = 0;
@@ -111,6 +111,20 @@ public class Interpreter {
 	 */
 	public void setSymbolTable(SymbolTable symbolTable) {
 		this.symbolTable = symbolTable;
+	}
+	
+	/**
+	 * @return the serverSymbolTable
+	 */
+	public HashMap<String, SymbolTable> getServerSymbolTable() {
+		return serverSymbolTable;
+	}
+
+	/**
+	 * @param serverSymbolTable the simulatorSymbolTable to set
+	 */
+	public void setServerSymbolTable(HashMap<String, SymbolTable> serverSymbolTable) {
+		this.serverSymbolTable = serverSymbolTable;
 	}
 	
 	// Methods

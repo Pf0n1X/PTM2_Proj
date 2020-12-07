@@ -12,7 +12,7 @@ public class ReturnCommand extends Command {
 	private Expression exp;
 	
 	// Constructors
-	private ReturnCommand(Interpreter interpreter) {
+	public ReturnCommand(Interpreter interpreter) {
 		super(interpreter);
 	}
 	
