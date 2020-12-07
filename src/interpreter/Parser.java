@@ -27,7 +27,6 @@ public class Parser {
 		String codeLine;
 		
 		for (int lineIndex = 0; lineIndex < code.length; lineIndex++) {
-			codeLine = 
 		}
 	}
 	

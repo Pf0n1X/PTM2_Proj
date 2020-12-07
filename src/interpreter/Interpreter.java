@@ -2,22 +2,9 @@ package interpreter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.sound.sampled.Line;
-
 import commands.Command;
 import commands.CommandBuilder;
-import commands.CommandFactory;
-import commands.DefineVarCommand;
-import commands.IfCommand;
-import commands.OpenServerCommand;
-import commands.ReturnCommand;
-import commands.SleepCommand;
-import commands.WhileCommand;
 import math_expressions.CommandExpression;
-import math_expressions.Plus;
 import symbols.SymbolTable;
 
 public class Interpreter {
