@@ -1,10 +1,29 @@
 package commands;
 
-public class DefineVarCommand implements Command {
+import java.util.ArrayList;
+
+import interpreter.Interpreter;
+import math_expressions.Variable;
+
+public class DefineVarCommand extends Command {
+
+	public DefineVarCommand(Interpreter interpreter) {
+		super(interpreter);
+		// TODO Auto-generated constructor stub
+	}
+
 
 	@Override
 	public int execute() {
-		// TODO Auto-generated method stub
+		ArrayList<String[]> tokens = this.interpreter.getTokens();
+		int indexBlockOfTokens = this.interpreter.getTokenBlockIndex();
+		int indexToken = this.interpreter.getTokenIndex();
+		String variableServerName = tokens.get(indexBlockOfTokens)[indexToken + 1];
+
+		this.interpreter.getServerSymbolTable().put(variableServerName, new Variable(variableServerName, 0.0));
+
+		this.interpreter.setTokenIndex(indexToken + 1);
+
 		return 0;
 	}
 

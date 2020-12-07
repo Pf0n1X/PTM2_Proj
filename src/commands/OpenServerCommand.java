@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import interpreter.Interpreter;
 import interpreter.ShuntingYard;
+import math_expressions.SimulatorSymbolVariable;
 
 public class OpenServerCommand extends Command {
 	
@@ -96,14 +97,14 @@ public class OpenServerCommand extends Command {
 						String simulatorVariableName = variblesNames[i];
 						double simulatorVariableValue = Double.parseDouble(variblesValues[i]);
 
-						symbo simulatorVariable = this.interpreter.getSimulatorSymbolTable()
+						SimulatorSymbolVariable simulatorVariable = this.interpreter.getSimulatorSymbolTable()
 								.get(simulatorVariableName);
 
 						if (simulatorVariable != null) {
-							simulatorVariable.setValue(simulatorVariableValue);
+							simulatorVariable.setVal(simulatorVariableValue);
 						} else {
-							simulatorVariable = new SimulatorVariable(simulatorVariableValue, simulatorVariableName);
-							simulatorVariable.setValue(simulatorVariableValue);
+							simulatorVariable = new SimulatorSymbolVariable(simulatorVariableName, simulatorVariableValue);
+							simulatorVariable.setVal(simulatorVariableValue);
 							this.interpreter.getSimulatorSymbolTable().put(simulatorVariableName, simulatorVariable);
 						}
 					}
@@ -134,10 +135,10 @@ public class OpenServerCommand extends Command {
 			// 2. [...")", "number"...]
 			// 3. [...")", "("...]
 			// 4. [..."number", "("...]
-			if ((ShuntingYard.(str[indexToken]) && ShuntingYard.isDouble(str[indexToken + 1])
+			if ((ShuntingYard.isDouble(str[indexToken]) && ShuntingYard.isDouble(str[indexToken + 1])
 					|| (str[indexToken].equals(")") && ShuntingYard.isDouble(str[indexToken + 1]))
 					|| (str[indexToken].equals(")") && str[indexToken + 1].equals("("))
-					|| (ShuntingYardAlgorithm.isDouble(str[indexToken]) && str[indexToken + 1].equals("(")))) {
+					|| (ShuntingYard.isDouble(str[indexToken]) && str[indexToken + 1].equals("(")))) {
 				list.add(str[indexToken]);
 				break;
 			}

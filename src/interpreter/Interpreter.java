@@ -5,6 +5,7 @@ import java.util.HashMap;
 import commands.Command;
 import commands.CommandBuilder;
 import math_expressions.CommandExpression;
+import math_expressions.SimulatorSymbolVariable;
 import math_expressions.Variable;
 
 public class Interpreter {
@@ -16,10 +17,12 @@ public class Interpreter {
 	private int tokenIndex;
 	private int tokenBlockIndex;
 	private HashMap<String, Variable> serverSymbolTable;
+	private HashMap<String, SimulatorSymbolVariable> simulatorSymbolTable;
 
 	// Constructors
 	public Interpreter() {
 		this.setServerSymbolTable(new HashMap<String, Variable>());
+		this.setSimulatorSymbolTable(new HashMap<String, SimulatorSymbolVariable>());
 		this.tokens = new ArrayList<String[]>();
 		this.commandBuilder = new CommandBuilder(this);
 		this.returnedValue = 0;
@@ -156,5 +159,13 @@ public class Interpreter {
 			}
 			
 		}
+	}
+
+	public HashMap<String, SimulatorSymbolVariable> getSimulatorSymbolTable() {
+		return simulatorSymbolTable;
+	}
+
+	public void setSimulatorSymbolTable(HashMap<String, SimulatorSymbolVariable> simulatorSymbolTable) {
+		this.simulatorSymbolTable = simulatorSymbolTable;
 	}
 }

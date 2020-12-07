@@ -161,7 +161,7 @@ public class ShuntingYard {
 		}
 	}
 
-	private static boolean isParsableToDouble(String str) {
+	public static boolean isParsableToDouble(String str) {
 		try {
 	         Double num = Double.valueOf(str);
 	         
@@ -171,4 +171,15 @@ public class ShuntingYard {
 		
 		return true;
 	}
+	
+	// Returns true if the received string's value is double
+	public static boolean isDouble(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
 }
