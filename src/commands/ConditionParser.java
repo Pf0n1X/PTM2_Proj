@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import booleanExpressions.BooleanExpression;
 
-public abstract class ConditionParser implements Command {
+public abstract class ConditionParser extends Command {
 	
 	// Data Members
 	protected BooleanExpression condition;
