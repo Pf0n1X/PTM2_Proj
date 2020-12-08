@@ -1,11 +1,86 @@
 package commands;
 
-public class ConnectCommand implements Command {
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.util.ArrayList;
 
-	@Override
-	public int execute() {
-		// TODO Auto-generated method stub
-		return 0;
+import interpreter.Interpreter;
+import interpreter.ShuntingYard;
+
+public class ConnectCommand extends Command {
+	
+	// Data Members
+	private static Socket server;
+	private static PrintWriter serverPrinter;
+	private static volatile boolean isConnected = false;
+
+	// Constructors
+	public ConnectCommand(Interpreter interpreter) {
+		super(interpreter);
 	}
 
+	// Methods
+	@Override
+	public int execute() {
+		int tokenBlockIndex = this.getInterpreter().getTokenBlockIndex();
+		int tokenIndex = this.getInterpreter().getTokenBlockIndex();
+		ArrayList<String[]> tokens = this.getInterpreter().getTokens();
+		ArrayList<String> connectionExpression = new ArrayList<String>();
+		String[] block = this.interpreter.getTokens().get(tokenBlockIndex);
+		String ip;
+		double port;
+		
+		// Get the ip.
+		ip = tokens.get(tokenBlockIndex)[tokenIndex + 1];
+		
+		// Get the port.
+		for (int connectionBlockIndex = (tokenIndex + 2); connectionBlockIndex < block.length; connectionBlockIndex++) {
+			connectionExpression.add(block[connectionBlockIndex]);
+		}
+		
+		port = ShuntingYard.run(connectionExpression, this.interpreter.getServerSymbolTable());
+		
+		// Attempt a connection
+		while (!isConnected) {
+			try {
+				server = new Socket(ip, (int)port);
+				serverPrinter = new PrintWriter(server.getOutputStream());
+				isConnected = true;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		this.interpreter.setTokenIndex(connectionExpression.size() + 1);
+
+		return 0;
+	}
+	
+	public static void close() {
+		if (isConnected == true) {
+			
+			send("bye");
+			serverPrinter.close();
+
+			while (true) {
+				try {
+					server.close();
+					break;
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+
+			isConnected = false;
+		}
+	}
+	
+	// This method sends a command string to the simulation server.
+	public static void send(String line) {
+		if (isConnected == true) {
+			serverPrinter.println(line);
+			serverPrinter.flush();
+		}
+	}
 }

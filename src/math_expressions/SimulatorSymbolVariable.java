@@ -15,8 +15,6 @@ public class SimulatorSymbolVariable extends Variable {
 		super.setVal(val);
 		setChanged();
 		notifyObservers(val);
-
-		ConnectCommand.executeServerCommand("set " + this.getKey() + " " + this.getVal());
+		ConnectCommand.send("set " + this.getKey() + " " + this.getVal());
 	}
-
 }
