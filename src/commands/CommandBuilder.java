@@ -13,10 +13,6 @@ public class CommandBuilder {
 	// Cosntructors
 	public CommandBuilder(Interpreter interpreter) {
 		this.setCommandMap(new HashMap<String, Command>());
-//		this.getCommandMap().put("+", new Plus(null, null));
-//		this.getCommandMap().put("-", new Minus(null, null));
-//		this.getCommandMap().put("*", new Mul(null, null));
-//		this.getCommandMap().put("/", new Div(null, null));
 		this.getCommandMap().put("return", new ReturnCommand(interpreter));
 		this.getCommandMap().put("var", new DefineVarCommand(interpreter));
 		this.getCommandMap().put("openDataServer", new OpenServerCommand(interpreter)); // TODO: Add port and rate settings

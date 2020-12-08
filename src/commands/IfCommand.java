@@ -1,22 +1,31 @@
 package commands;
 
-import booleanExpressions.BooleanExpression;
+import interpreter.Interpreter;
 
 public class IfCommand extends ConditionParser {
 	
 	
-	public IfCommand(BooleanExpression condition) {
-		super(condition);
+	public IfCommand(Interpreter interpreter) {
+		super(interpreter);
 	}
 
 	@Override
 	public int execute() {
-		if (this.getCondition().calculate()) {
-			for (Command command : commands) {
-				command.execute();
-			}
-		};
-	
-		return 0; // TODO: What am I supposed to return here.
+		super.execute();
+		
+		Interpreter inter = this.getInterpreter();
+		
+		// Get the condition result.
+		boolean conditionRes = this.calculateCondition();
+		
+		// Validate the condition.
+		if (conditionRes)
+			this.runCommands();
+		
+		// Move the index cursors forward.
+		inter.setTokenBlockIndex(this.getTokenBlockIndexBeginning() + this.getCommands().size());
+		inter.setTokenIndex(0);
+		
+		return 0;
 	}
 }

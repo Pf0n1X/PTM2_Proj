@@ -8,9 +8,6 @@ import math_expressions.Expression;
 
 public class ReturnCommand extends Command {
 	
-	// Data Members
-	private Expression exp;
-	
 	// Constructors
 	public ReturnCommand(Interpreter interpreter) {
 		super(interpreter);
@@ -19,11 +16,13 @@ public class ReturnCommand extends Command {
 	// Methods
 	@Override
 	public int execute() {
-		int indexToken = this.interpreter.getTokenIndex();
+		int tokenIndex = this.interpreter.getTokenIndex();
+		System.out.println("The tokens are");
+		System.out.println(this.interpreter.getTokens().toString());
 		String[] block = this.interpreter.getTokens().get(this.interpreter.getTokenBlockIndex());
 		ArrayList<String> expression = new ArrayList<String>();
 
-		for (int i = (indexToken + 1); i < block.length; i++) {
+		for (int i = (tokenIndex + 1); i < block.length; i++) {
 			expression.add(block[i]);
 		}
 

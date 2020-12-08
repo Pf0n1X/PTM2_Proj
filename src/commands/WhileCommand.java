@@ -1,21 +1,28 @@
 package commands;
 
-import booleanExpressions.BooleanExpression;
+import interpreter.Interpreter;
 
 public class WhileCommand extends ConditionParser {
 
-	public WhileCommand(BooleanExpression condition) {
-		super(condition);
+	public WhileCommand(Interpreter interpreter) {
+		super(interpreter);
 	}
 
 	@Override
 	public int execute() {
-		while (this.getCondition().calculate()) {
-			for (Command command : commands) {
-				command.execute();
-			}
-		}
+		super.execute();
 		
-		return 0; // TODO: What am I supposed to return here ?
+		Interpreter inter = this.getInterpreter();
+		
+		// Validate the condition and run through the commands if it is
+		// equal to true.
+		while (this.calculateCondition())
+			this.runCommands();
+		
+		// Move the index cursors forward.
+		inter.setTokenBlockIndex(this.getTokenBlockIndexBeginning() + this.getCommands().size());
+		inter.setTokenIndex(0);
+		
+		return 0;
 	}
 }

@@ -8,7 +8,7 @@ public class Minus extends BinaryExpression {
 
 	@Override
 	public double calculate() {
-		return this.getRight().calculate() - this.getLeft().calculate();
+		return this.getLeft().calculate() - this.getRight().calculate();
 	}
 
 }

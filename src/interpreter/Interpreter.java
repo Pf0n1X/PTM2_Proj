@@ -119,13 +119,15 @@ public class Interpreter {
 	private ArrayList<String[]> useLexer(String[] input) {
 		ArrayList<String[]> tokens = new ArrayList<String[]>();
 		
+		System.out.println("T3");
 		for (String line : input) {
+			System.out.println(line);
 
 			line = line.replaceAll("\\{", "\\ { ").replaceAll("\\}", "\\ } ").replaceAll("\\>", "\\ > ")
 					.replaceAll("\\<", "\\ < ").replaceAll("\\+", "\\ + ").replaceAll("\\-", "\\ - ")
 					.replaceAll("\\*", "\\ * ").replaceAll("\\/", "\\ / ").replaceAll("\\(", "\\ ( ")
 					.replaceAll("\\)", "\\ ) ").replaceAll("\\=", "\\ = ").trim();
-
+			
 			tokens.add(line.split("\\s+"));
 		}
 		
@@ -136,10 +138,11 @@ public class Interpreter {
 		ArrayList<String[]> tokens = useLexer(code);
 		parse(tokens);
 		
-		return 0;
+		return this.getReturnedValue();
 	}
 	
 	public void parse(ArrayList<String[]> tokens) {
+		this.setTokens(tokens);
 		
 		// Go through every token block(AKA line).
 		for (tokenBlockIndex = 0; tokenBlockIndex < tokens.size(); tokenBlockIndex++) {

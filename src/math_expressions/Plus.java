@@ -8,7 +8,6 @@ public class Plus extends BinaryExpression {
 
 	@Override
 	public double calculate() {
-		// TODO Auto-generated method stub
-		return this.getRight().calculate() + this.getLeft().calculate();
+		return this.getLeft().calculate() + this.getRight().calculate();
 	}
 }
