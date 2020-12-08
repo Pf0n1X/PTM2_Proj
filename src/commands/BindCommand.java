@@ -1,6 +1,7 @@
 package commands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import interpreter.Interpreter;
 import math_expressions.SimulatorSymbolVariable;
@@ -14,14 +15,20 @@ public class BindCommand extends Command {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public int execute() {
+	public int execute() {		
+//		try {
+//			Thread.sleep(100);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		
 		ArrayList<String[]> tokens = this.interpreter.getTokens();
 		int indexBlockOfTokens = this.interpreter.getTokenBlockIndex();
 		int indexToken = this.interpreter.getTokenIndex();
 		String variableSimulatorName = tokens.get(indexBlockOfTokens)[indexToken + 1];
 		String variableServerName = tokens.get(indexBlockOfTokens)[indexToken - 2];
-
-		SimulatorSymbolVariable simulatorVariable = this.interpreter.getSimulatorSymbolTable().get(variableSimulatorName);
+		HashMap<String, SimulatorSymbolVariable> simTable = this.getInterpreter().getSimulatorSymbolTable();
+		SimulatorSymbolVariable simulatorVariable = simTable.get(variableSimulatorName);
 		Variable serverVariable = null;
 
 		if (this.interpreter.getServerSymbolTable().containsKey(variableServerName) == true) {
@@ -31,11 +38,12 @@ public class BindCommand extends Command {
 			return 0;
 		}
 
-		try {
-			Thread.sleep(100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(100);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		
 		simulatorVariable.addObserver(serverVariable);
 		serverVariable.addObserver(simulatorVariable);
 

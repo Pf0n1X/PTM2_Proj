@@ -13,8 +13,7 @@ public class DisconnectCommand extends Command {
 		ConnectCommand.close();
 
 		OpenServerCommand.stop();
-
+		
 		return 1;
 	}
-
 }

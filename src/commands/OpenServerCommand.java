@@ -14,7 +14,7 @@ import math_expressions.SimulatorSymbolVariable;
 public class OpenServerCommand extends Command {
 	
 	// Data Members
-	private static volatile boolean isConnect = false;
+	public static volatile boolean isConnect = false; // TODO: Change to private.
 	private int port;
 	private int rate;
 	private static ServerSocket serverSocket = null;
@@ -33,8 +33,16 @@ public class OpenServerCommand extends Command {
 	@Override
 	public int execute() {
 		calcExpression();
-
 		new Thread(() -> runServer()).start();
+		
+		try {
+			while(!isConnect)
+				Thread.sleep(100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return 0;
 	}
 
@@ -117,7 +125,6 @@ public class OpenServerCommand extends Command {
 			e.printStackTrace();
 		}		
 	}
-
 
 	private void calcExpression() {
 		ArrayList<String[]> tokens = this.interpreter.getTokens();

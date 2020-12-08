@@ -13,7 +13,7 @@ public class ConnectCommand extends Command {
 	// Data Members
 	private static Socket server;
 	private static PrintWriter serverPrinter;
-	private static volatile boolean isConnected = false;
+	public static volatile boolean isConnected = false; // TODO: Change to private
 
 	// Constructors
 	public ConnectCommand(Interpreter interpreter) {

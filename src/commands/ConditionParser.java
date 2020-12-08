@@ -99,7 +99,7 @@ public abstract class ConditionParser extends Command {
 			curTokenBlockIndex++;
 		}
 	}
-	
+ 
 	private void createCondition() {
 		ArrayList<String[]> tokens = this.getInterpreter().getTokens();
 		int curBlockIndex = this.getInterpreter().getTokenBlockIndex();
@@ -109,10 +109,11 @@ public abstract class ConditionParser extends Command {
 		
 		while(flag) {
 			curToken = tokens.get(curBlockIndex)[curTokenIndex];
-			if (curToken == "<" ||
-					curToken == ">" ||
-					curToken == "=" ||
-					curToken == "!") {
+			
+			if (curToken.equals("<") ||
+					curToken.equals(">") ||
+					curToken.equals("=" )||
+					curToken.equals("!")) {
 				flag = false;
 			} else {
 				this.getLeft().add(tokens.get(curBlockIndex)[curTokenIndex]);
