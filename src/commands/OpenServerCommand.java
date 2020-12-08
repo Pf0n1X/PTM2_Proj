@@ -14,7 +14,6 @@ import math_expressions.SimulatorSymbolVariable;
 public class OpenServerCommand extends Command {
 	
 	// Data Members
-	// Data Members
 	private static volatile boolean isConnect = false;
 	private int port;
 	private int rate;
@@ -130,11 +129,6 @@ public class OpenServerCommand extends Command {
 
 		// Creates the server's port
 		for (; indexToken < (lengthOfBlock - 1); indexToken++) {
-			// Checks for:
-			// 1. [..."number", "number"...]
-			// 2. [...")", "number"...]
-			// 3. [...")", "("...]
-			// 4. [..."number", "("...]
 			if ((ShuntingYard.isParsableToDouble(str[indexToken]) && ShuntingYard.isParsableToDouble(str[indexToken + 1])
 					|| (str[indexToken].equals(")") && ShuntingYard.isParsableToDouble(str[indexToken + 1]))
 					|| (str[indexToken].equals(")") && str[indexToken + 1].equals("("))
@@ -217,6 +211,8 @@ public class OpenServerCommand extends Command {
 	public static void setInput(BufferedReader input) {
 		OpenServerCommand.input = input;
 	}
-	
+	public static void stop() {
+		setConnect(false);
+	}
 	
 }

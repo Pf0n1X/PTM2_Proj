@@ -157,6 +157,21 @@ public class Interpreter {
 			
 		}
 	}
+	public void printInterpeter() {
+		System.out.println("\nResults:");
+		System.out.println(this.serverSymbolTable.keySet());
+		System.out.println(this.simulatorSymbolTable.keySet());
+
+		for (Variable var : this.serverSymbolTable.values()) {
+			System.out.print(var.getKey() + " = " + var.getVal() + ", ");
+		}
+		System.out.println("");
+		for (Variable var : this.simulatorSymbolTable.values()) {
+			System.out.print(var.getKey() + " = " + var.getVal() + ", ");
+		}
+		System.out.println("");
+	}
+
 
 	public HashMap<String, SimulatorSymbolVariable> getSimulatorSymbolTable() {
 		return simulatorSymbolTable;

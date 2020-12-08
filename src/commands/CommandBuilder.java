@@ -16,6 +16,9 @@ public class CommandBuilder {
 		this.getCommandMap().put("openDataServer", new OpenServerCommand(interpreter)); // TODO: Add port and rate settings
 		this.getCommandMap().put("while", new WhileCommand(interpreter));
 		this.getCommandMap().put("if", new IfCommand(interpreter));
+		this.getCommandMap().put("bind", new BindCommand(interpreter));
+		this.getCommandMap().put("connect", new ConnectCommand(interpreter));
+		this.getCommandMap().put("disconnect", new DisconnectCommand(interpreter));
 		this.getCommandMap().put("sleep", new SleepCommand(interpreter));
 		this.getCommandMap().put("=", new PutVarCommand(interpreter));
 	}

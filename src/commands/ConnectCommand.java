@@ -24,7 +24,7 @@ public class ConnectCommand extends Command {
 	@Override
 	public int execute() {
 		int tokenBlockIndex = this.getInterpreter().getTokenBlockIndex();
-		int tokenIndex = this.getInterpreter().getTokenBlockIndex();
+		int tokenIndex = this.getInterpreter().getTokenIndex();
 		ArrayList<String[]> tokens = this.getInterpreter().getTokens();
 		ArrayList<String> connectionExpression = new ArrayList<String>();
 		String[] block = this.interpreter.getTokens().get(tokenBlockIndex);
