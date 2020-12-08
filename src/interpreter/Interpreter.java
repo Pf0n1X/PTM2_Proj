@@ -132,7 +132,29 @@ public class Interpreter {
 		return tokens;
 	}
 	
+	// Resets variables
+	private void reset() {
+		
+		// Reset the tokens.
+		this.getTokens().clear();
+		this.setTokens(null);
+		this.setTokens(new ArrayList<String[]>());
+		this.setTokenIndex(0);
+		this.setTokenBlockIndex(0);
+		this.setReturnedValue(0);
+		
+		// Initialize the symbol tables.
+		this.getServerSymbolTable().clear();
+		this.getSimulatorSymbolTable().clear();
+		
+		// Initialize the simulator variables
+		this.getSimulatorSymbolTable().put("simX", new SimulatorSymbolVariable("simX", 0.0));
+		this.getSimulatorSymbolTable().put("simY", new SimulatorSymbolVariable("simY", 0.0));
+		this.getSimulatorSymbolTable().put("simZ", new SimulatorSymbolVariable("simZ", 0.0));
+	}
+	
 	public double interpret(String[] code) {
+		reset();
 		ArrayList<String[]> tokens = useLexer(code);
 		parse(tokens);
 		
@@ -154,7 +176,6 @@ public class Interpreter {
 					cmdExp.calculate();
 				}
 			}
-			
 		}
 	}
 	public void printInterpeter() {
@@ -171,7 +192,6 @@ public class Interpreter {
 		}
 		System.out.println("");
 	}
-
 
 	public HashMap<String, SimulatorSymbolVariable> getSimulatorSymbolTable() {
 		return simulatorSymbolTable;
