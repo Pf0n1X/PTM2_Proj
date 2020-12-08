@@ -19,6 +19,7 @@ public class CommandBuilder {
 		this.getCommandMap().put("while", new WhileCommand(interpreter));
 		this.getCommandMap().put("if", new IfCommand(interpreter));
 		this.getCommandMap().put("sleep", new SleepCommand(interpreter));
+		this.getCommandMap().put("=", new PutVarCommand(interpreter));
 	}
 	
 	// Methods
