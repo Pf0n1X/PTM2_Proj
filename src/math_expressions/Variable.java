@@ -27,8 +27,8 @@ public class Variable extends Observable implements Expression, Observer {
 
 	@Override
 	public double calculate() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return this.getVal();
 	}
 	
 	// Getters & Setters 

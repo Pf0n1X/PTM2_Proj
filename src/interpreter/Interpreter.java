@@ -119,9 +119,7 @@ public class Interpreter {
 	private ArrayList<String[]> useLexer(String[] input) {
 		ArrayList<String[]> tokens = new ArrayList<String[]>();
 		
-		System.out.println("T3");
 		for (String line : input) {
-			System.out.println(line);
 
 			line = line.replaceAll("\\{", "\\ { ").replaceAll("\\}", "\\ } ").replaceAll("\\>", "\\ > ")
 					.replaceAll("\\<", "\\ < ").replaceAll("\\+", "\\ + ").replaceAll("\\-", "\\ - ")
@@ -149,13 +147,9 @@ public class Interpreter {
 			
 			// Go through the key words.
 			for (tokenIndex = 0; tokenIndex < tokens.get(tokenBlockIndex).length; tokenIndex++) {
-				System.out.println("T1");
-				System.out.println(tokens.get(tokenBlockIndex)[tokenIndex]);
 				Command command = this.getCommandBuilder().getCommand(tokens.get(tokenBlockIndex)[tokenIndex]);
 				
 				if (command != null) {
-					
-					System.out.println(command.getClass());
 					CommandExpression cmdExp = new CommandExpression(command);
 					cmdExp.calculate();
 				}

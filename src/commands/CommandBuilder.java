@@ -1,8 +1,6 @@
 package commands;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-
 import interpreter.Interpreter;
 
 public class CommandBuilder {
@@ -10,7 +8,7 @@ public class CommandBuilder {
 	// Data Members
 	private HashMap<String, Command> commandMap;
 	
-	// Cosntructors
+	// Constructors
 	public CommandBuilder(Interpreter interpreter) {
 		this.setCommandMap(new HashMap<String, Command>());
 		this.getCommandMap().put("return", new ReturnCommand(interpreter));

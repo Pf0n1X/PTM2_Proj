@@ -9,9 +9,7 @@ public class DefineVarCommand extends Command {
 
 	public DefineVarCommand(Interpreter interpreter) {
 		super(interpreter);
-		// TODO Auto-generated constructor stub
 	}
-
 
 	@Override
 	public int execute() {
@@ -19,12 +17,9 @@ public class DefineVarCommand extends Command {
 		int indexBlockOfTokens = this.interpreter.getTokenBlockIndex();
 		int indexToken = this.interpreter.getTokenIndex();
 		String variableServerName = tokens.get(indexBlockOfTokens)[indexToken + 1];
-
 		this.interpreter.getServerSymbolTable().put(variableServerName, new Variable(variableServerName, 0.0));
-
 		this.interpreter.setTokenIndex(indexToken + 1);
 
 		return 0;
 	}
-
 }
