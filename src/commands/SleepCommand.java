@@ -30,7 +30,7 @@ public class SleepCommand extends Command {
 			expression.add(block[i]);
 		}
 
-		int timeToSleep = (int) ShuntingYard.execute(expression, this.interpreter.getServerSymbolTable());
+		int timeToSleep = (int) ShuntingYard.run(expression, this.interpreter.getServerSymbolTable());
 
 		try {
 			Thread.sleep(timeToSleep);

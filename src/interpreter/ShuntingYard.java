@@ -1,8 +1,13 @@
 package interpreter;
 
 import java.util.*;
-
+import math_expressions.Expression;
 import math_expressions.Variable;
+import math_expressions.Number;
+import math_expressions.Plus;
+import math_expressions.Minus;
+import math_expressions.Mul;
+import math_expressions.Div;
 
 public class ShuntingYard {
 
@@ -160,7 +165,9 @@ public class ShuntingYard {
 			}
 		}
 	}
-
+	
+	// This method checks if a string represents a double
+	// typed number.
 	public static boolean isParsableToDouble(String str) {
 		try {
 	         Double num = Double.valueOf(str);
@@ -172,14 +179,50 @@ public class ShuntingYard {
 		return true;
 	}
 	
-	// Returns true if the received string's value is double
-	public static boolean isDouble(String str) {
-		try {
-			Double.parseDouble(str);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
+	// This method gets the infix expression, converts it to postfix form
+	// creates an expression object from it and executes the code.
+	public static double run(ArrayList<String> exp, HashMap<String, Variable> symbolTable) {
+		String postFixExpression = convertInfixToPostfix(exp, symbolTable);
+		return (runPostfixExpression(postFixExpression));
 	}
+	
+	// Calculate post-fix string expression
+	private static double runPostfixExpression(String postfix) {
+		Stack<Expression> expressionStack = new Stack<>();
+		String[] expressions = postfix.split(",");
+		Expression right;
+		Expression left;
+		
+		// Go through all the the expressions after splitting them.
+		for (String cur : expressions) {
+			
+			// If the expression represents a number, push it as a number object back to the stack.
+			if (isParsableToDouble(cur)) {
+				expressionStack.push(new Number(Double.parseDouble(cur)));
+			} else {
+				
+				// Otherwise, it must be a binary expression which means a conversion
+				// to whatever type of expression it is is needed.
+				right = expressionStack.pop();
+				left = expressionStack.pop();
 
+				switch (cur) {
+				case "+":
+					expressionStack.add(new Plus(left, right));
+					break;
+				case "-":
+					expressionStack.add(new Minus(left, right));
+					break;
+				case "*":
+					expressionStack.add(new Mul(left, right));
+					break;
+				case "/":
+					expressionStack.add(new Div(left, right));
+					break;
+				}
+			}
+		}
+		
+		return Math.floor(expressionStack.pop().calculate() * 1000) / 1000;
+	}
 }

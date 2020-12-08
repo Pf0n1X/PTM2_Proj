@@ -135,17 +135,17 @@ public class OpenServerCommand extends Command {
 			// 2. [...")", "number"...]
 			// 3. [...")", "("...]
 			// 4. [..."number", "("...]
-			if ((ShuntingYard.isDouble(str[indexToken]) && ShuntingYard.isDouble(str[indexToken + 1])
-					|| (str[indexToken].equals(")") && ShuntingYard.isDouble(str[indexToken + 1]))
+			if ((ShuntingYard.isParsableToDouble(str[indexToken]) && ShuntingYard.isParsableToDouble(str[indexToken + 1])
+					|| (str[indexToken].equals(")") && ShuntingYard.isParsableToDouble(str[indexToken + 1]))
 					|| (str[indexToken].equals(")") && str[indexToken + 1].equals("("))
-					|| (ShuntingYard.isDouble(str[indexToken]) && str[indexToken + 1].equals("(")))) {
+					|| (ShuntingYard.isParsableToDouble(str[indexToken]) && str[indexToken + 1].equals("(")))) {
 				list.add(str[indexToken]);
 				break;
 			}
 			list.add(str[indexToken]);
 		}
 
-		this.port = (int) ShuntingYard.execute(list, new Interpreter().getServerSymbolTable());
+		this.port = (int) ShuntingYard.run(list, new Interpreter().getServerSymbolTable());
 
 		list.clear();
 
@@ -153,7 +153,7 @@ public class OpenServerCommand extends Command {
 			list.add(str[indexToken]);
 		}
 
-		this.rate = (int) ShuntingYard.execute(list, this.interpreter.getServerSymbolTable());
+		this.rate = (int) ShuntingYard.run(list, this.interpreter.getServerSymbolTable());
 
 		this.interpreter.setTokenIndex(str.length);		
 	}

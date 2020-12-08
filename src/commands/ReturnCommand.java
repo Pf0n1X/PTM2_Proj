@@ -28,7 +28,7 @@ public class ReturnCommand extends Command {
 		}
 
 		this.interpreter
-				.setReturnedValue(ShuntingYard.execute(expression, this.interpreter.getServerSymbolTable()));
+				.setReturnedValue(ShuntingYard.run(expression, this.interpreter.getServerSymbolTable()));
 
 		this.interpreter.setTokenIndex(expression.size() + this.interpreter.getTokenIndex());
 
