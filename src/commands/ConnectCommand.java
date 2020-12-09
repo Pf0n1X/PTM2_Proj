@@ -13,7 +13,7 @@ public class ConnectCommand extends Command {
 	// Data Members
 	private static Socket server;
 	private static PrintWriter serverPrinter;
-	public static volatile boolean isConnected = false; // TODO: Change to private
+	public static volatile boolean isConnect = false; // TODO: Change to private
 
 	// Constructors
 	public ConnectCommand(Interpreter interpreter) {
@@ -31,10 +31,8 @@ public class ConnectCommand extends Command {
 		String ip;
 		double port;
 		
-		// Get the ip.
+//		Get the ip and port
 		ip = tokens.get(tokenBlockIndex)[tokenIndex + 1];
-		
-		// Get the port.
 		for (int connectionBlockIndex = (tokenIndex + 2); connectionBlockIndex < block.length; connectionBlockIndex++) {
 			connectionExpression.add(block[connectionBlockIndex]);
 		}
@@ -42,11 +40,11 @@ public class ConnectCommand extends Command {
 		port = ShuntingYard.run(connectionExpression, this.interpreter.getServerSymbolTable());
 		
 		// Attempt a connection
-		while (!isConnected) {
+		while (!isConnect) {
 			try {
 				server = new Socket(ip, (int)port);
 				serverPrinter = new PrintWriter(server.getOutputStream());
-				isConnected = true;
+				isConnect = true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -58,9 +56,9 @@ public class ConnectCommand extends Command {
 	}
 	
 	public static void close() {
-		if (isConnected == true) {
+		if (isConnect == true) {
 			
-			send("bye");
+			send("Server closed.");
 			serverPrinter.close();
 
 			while (true) {
@@ -72,13 +70,13 @@ public class ConnectCommand extends Command {
 				}
 			}
 
-			isConnected = false;
+			isConnect = false;
 		}
 	}
 	
 	// This method sends a command string to the simulation server.
 	public static void send(String line) {
-		if (isConnected == true) {
+		if (isConnect == true) {
 			serverPrinter.println(line);
 			serverPrinter.flush();
 		}

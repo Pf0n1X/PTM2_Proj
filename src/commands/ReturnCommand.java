@@ -23,8 +23,8 @@ public class ReturnCommand extends Command {
 			expression.add(block[i]);
 		}
 
-		this.interpreter
-				.setReturnedValue(ShuntingYard.run(expression, this.interpreter.getServerSymbolTable()));
+		this.interpreter.setReturnedValue(
+				ShuntingYard.run(expression, this.interpreter.getServerSymbolTable()));
 
 		this.interpreter.setTokenIndex(expression.size() + this.interpreter.getTokenIndex());
 

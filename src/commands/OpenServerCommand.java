@@ -33,7 +33,7 @@ public class OpenServerCommand extends Command {
 	@Override
 	public int execute() {
 		calcExpression();
-		new Thread(() -> runServer()).start();
+		new Thread(() -> run()).start();
 		
 		try {
 			while(!isConnect)
@@ -47,7 +47,7 @@ public class OpenServerCommand extends Command {
 	}
 
 
-	private void runServer() {
+	private void run() {
 		try {
 			while (isConnect == false) {
 				serverSocket = new ServerSocket(port);
@@ -84,24 +84,23 @@ public class OpenServerCommand extends Command {
 
 	private void readInput() {
 
-		String[] variblesNames = { "simX", "simY", "simZ" };
-
+		String[] variblesKeys = { "simX", "simY", "simZ" };
 		String[] variblesValues;
-		String line;
+		String lineToRead;
 
 		try {
 			while (isConnect == true) {
 
-				if ((line = input.readLine()) == null) {
+				if ((lineToRead = input.readLine()) == null) {
 					continue;
 				} else {
-					variblesValues = line.split(",");
+					variblesValues = lineToRead.split(",");
 
-					for (int i = 0; i < variblesNames.length; i++) {
+					for (int i = 0; i < variblesKeys.length; i++) {
 						if (isConnect == false) {
 							break;
 						}
-						String simulatorVariableName = variblesNames[i];
+						String simulatorVariableName = variblesKeys[i];
 						double simulatorVariableValue = Double.parseDouble(variblesValues[i]);
 
 						SimulatorSymbolVariable simulatorVariable = this.interpreter.getSimulatorSymbolTable()
@@ -128,35 +127,37 @@ public class OpenServerCommand extends Command {
 
 	private void calcExpression() {
 		ArrayList<String[]> tokens = this.interpreter.getTokens();
-		int indexBlockOfTokens = this.interpreter.getTokenBlockIndex();
-		int indexToken = this.interpreter.getTokenIndex() + 1;
-		int lengthOfBlock = tokens.get(indexBlockOfTokens).length;
-		String[] str = tokens.get(indexBlockOfTokens);
+		int tokenBlockIndex = this.interpreter.getTokenBlockIndex();
+		int tokenIndex = this.interpreter.getTokenIndex() + 1;
+		int lengthOfBlock = tokens.get(tokenBlockIndex).length;
+		String[] string = tokens.get(tokenBlockIndex);
 		ArrayList<String> list = new ArrayList<String>();
 
 		// Creates the server's port
-		for (; indexToken < (lengthOfBlock - 1); indexToken++) {
-			if ((ShuntingYard.isParsableToDouble(str[indexToken]) && ShuntingYard.isParsableToDouble(str[indexToken + 1])
-					|| (str[indexToken].equals(")") && ShuntingYard.isParsableToDouble(str[indexToken + 1]))
-					|| (str[indexToken].equals(")") && str[indexToken + 1].equals("("))
-					|| (ShuntingYard.isParsableToDouble(str[indexToken]) && str[indexToken + 1].equals("(")))) {
-				list.add(str[indexToken]);
+		for (; tokenIndex < (lengthOfBlock - 1); tokenIndex++) {
+			if ((ShuntingYard.isParsableToDouble(string[tokenIndex]) &&
+				 ShuntingYard.isParsableToDouble(string[tokenIndex + 1]) 
+				 || (string[tokenIndex].equals(")") && 
+			         ShuntingYard.isParsableToDouble(string[tokenIndex + 1]))
+			     || (string[tokenIndex].equals(")") && string[tokenIndex + 1].equals("("))
+				 || (ShuntingYard.isParsableToDouble(string[tokenIndex]) && string[tokenIndex + 1].equals("(")))) {
+				list.add(string[tokenIndex]);
 				break;
 			}
-			list.add(str[indexToken]);
+			list.add(string[tokenIndex]);
 		}
 
 		this.port = (int) ShuntingYard.run(list, new Interpreter().getServerSymbolTable());
 
 		list.clear();
 
-		for (; indexToken < lengthOfBlock; indexToken++) {
-			list.add(str[indexToken]);
+		for (; tokenIndex < lengthOfBlock; tokenIndex++) {
+			list.add(string[tokenIndex]);
 		}
 
 		this.rate = (int) ShuntingYard.run(list, this.interpreter.getServerSymbolTable());
 
-		this.interpreter.setTokenIndex(str.length);		
+		this.interpreter.setTokenIndex(string.length);		
 	}
 
 

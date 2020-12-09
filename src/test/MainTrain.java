@@ -15,7 +15,7 @@ public class MainTrain {
 				"return "+rand+" * 5 - (8+2)"	
 		};
 		
-		if( MyInterpreter.interpret(test1)!=rand*5-(8+2))
+		if(MyInterpreter.interpret(test1)!=rand*5-(8+2))
 			System.out.println("failed test1 (-20)");
 
 		String[] test2={
@@ -29,7 +29,6 @@ public class MainTrain {
 			System.out.println("failed test2 (-20)");
 
 		String[] test3={
-				"openDataServer "+(port+1)+" 10",
 				"connect 127.0.0.1 "+port,
 				"var x",
 				"x = bind simX",

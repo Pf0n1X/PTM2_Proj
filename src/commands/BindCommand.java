@@ -16,11 +16,6 @@ public class BindCommand extends Command {
 	@SuppressWarnings("deprecation")
 	@Override
 	public int execute() {		
-//		try {
-//			Thread.sleep(100);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		
 		ArrayList<String[]> tokens = this.interpreter.getTokens();
 		int indexBlockOfTokens = this.interpreter.getTokenBlockIndex();
@@ -37,12 +32,6 @@ public class BindCommand extends Command {
 			System.out.println("Variable with the name: " + variableServerName + "does not exists...");
 			return 0;
 		}
-
-//		try {
-//			Thread.sleep(100);
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
 		
 		simulatorVariable.addObserver(serverVariable);
 		serverVariable.addObserver(simulatorVariable);

@@ -19,7 +19,7 @@ public class ShuntingYard {
 		ArrayList<String> expressionTokens = new ArrayList<String>(expression);
 
 		replaceVars(expressionTokens, varMap);
-		removeOperators(expressionTokens);
+		deleteOperators(expressionTokens);
 		checkMinuses(expressionTokens);
 
 		for (int i = 0; i < expressionTokens.size(); i++) {
@@ -83,7 +83,7 @@ public class ShuntingYard {
 		return stringBuilder.toString();
 	}
 	
-	private static void removeOperators(ArrayList<String> expressionTokens) {
+	private static void deleteOperators(ArrayList<String> expressionTokens) {
 		
 		final String ADD = "+";
 		final String SUB = "-";
