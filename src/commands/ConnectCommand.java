@@ -58,7 +58,7 @@ public class ConnectCommand extends Command {
 	public static void close() {
 		if (isConnect == true) {
 			
-			send("Server closed.");
+			send("bye");
 			serverPrinter.close();
 
 			while (true) {
