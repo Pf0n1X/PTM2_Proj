@@ -51,7 +51,6 @@ public class OpenServerCommand extends Command {
 		try {
 			while (isConnect == false) {
 				serverSocket = new ServerSocket(port);
-				serverSocket.setSoTimeout(1000);
 				clientSocket = serverSocket.accept();
 				input = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				isConnect = true;
