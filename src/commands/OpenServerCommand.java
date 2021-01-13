@@ -35,14 +35,14 @@ public class OpenServerCommand extends Command {
 		calcExpression();
 		new Thread(() -> run()).start();
 		
-		try {
-			while(!isConnect)
-				Thread.sleep(100);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+//		try {
+//			while(!isConnect)
+//				Thread.sleep(100);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
 		return 0;
 	}
 

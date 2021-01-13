@@ -2,6 +2,11 @@ package interpreter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import commands.Command;
 import commands.CommandBuilder;
 import math_expressions.CommandExpression;
@@ -117,19 +122,28 @@ public class Interpreter {
 	
 	// Methods
 	private ArrayList<String[]> useLexer(String[] input) {
-		ArrayList<String[]> tokens = new ArrayList<String[]>();
-		
-		for (String line : input) {
+		ArrayList<String[]> tokensList = new ArrayList<String[]>();
 
+		for (String line : input) {
+			
+			String varName = "";
+			if (line.contains("\"")) {
+				String[] parts = line.split("\"");
+				line = parts[0];
+				varName = " " + parts[1].substring(0, parts[1].length());
+			}
+			
 			line = line.replaceAll("\\{", "\\ { ").replaceAll("\\}", "\\ } ").replaceAll("\\>", "\\ > ")
 					.replaceAll("\\<", "\\ < ").replaceAll("\\+", "\\ + ").replaceAll("\\-", "\\ - ")
 					.replaceAll("\\*", "\\ * ").replaceAll("\\/", "\\ / ").replaceAll("\\(", "\\ ( ")
 					.replaceAll("\\)", "\\ ) ").replaceAll("\\=", "\\ = ").trim();
-			
-			tokens.add(line.split("\\s+"));
+
+			line = line + varName;
+
+			tokensList.add(line.split("\\s+"));
 		}
 		
-		return tokens;
+		return tokensList;
 	}
 	
 	// Resets variables
@@ -146,6 +160,18 @@ public class Interpreter {
 		// Initialize the symbol tables.
 		this.getServerSymbolTable().clear();
 		this.getSimulatorSymbolTable().clear();
+		
+		this.simulatorSymbolTable.put("/controls/flight/speedbrake", new SimulatorSymbolVariable("/controls/flight/speedbrake", 0.0));
+		this.simulatorSymbolTable.put("/controls/engines/current-engine/throttle", new SimulatorSymbolVariable("/controls/engines/current-engine/throttle", 0.0));
+		this.simulatorSymbolTable.put("/instrumentation/heading-indicator/offset-deg", new SimulatorSymbolVariable("/instrumentation/heading-indicator/offset-deg", 0.0));
+		this.simulatorSymbolTable.put("/instrumentation/airspeed-indicator/indicated-speed-kt", new SimulatorSymbolVariable("/instrumentation/airspeed-indicator/indicated-speed-kt", 0.0));
+		this.simulatorSymbolTable.put("/instrumentation/attitude-indicator/indicated-roll-deg", new SimulatorSymbolVariable("/instrumentation/attitude-indicator/indicated-roll-deg", 0.0));
+		this.simulatorSymbolTable.put("/instrumentation/attitude-indicator/internal-pitch-deg", new SimulatorSymbolVariable("/instrumentation/attitude-indicator/internal-pitch-deg", 0.0));
+		this.simulatorSymbolTable.put("/controls/flight/rudder", new SimulatorSymbolVariable("/controls/flight/rudder", 0.0));
+		this.simulatorSymbolTable.put("/controls/flight/aileron", new SimulatorSymbolVariable("/controls/flight/aileron", 0.0));
+		this.simulatorSymbolTable.put("/controls/flight/elevator", new SimulatorSymbolVariable("/controls/flight/elevator", 0.0));
+		this.simulatorSymbolTable.put("/instrumentation/altimeter/indicated-altitude-ft", new SimulatorSymbolVariable("/instrumentation/altimeter/indicated-altitude-ft", 0.0));
+		
 		
 		// Initialize the simulator variables
 		this.getSimulatorSymbolTable().put("simX", new SimulatorSymbolVariable("simX", 0.0));
