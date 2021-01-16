@@ -147,7 +147,7 @@ public class Interpreter {
 	}
 	
 	// Resets variables
-	private void reset() {
+	public void reset() {
 		
 		// Reset the tokens.
 		this.getTokens().clear();
@@ -158,29 +158,11 @@ public class Interpreter {
 		this.setReturnedValue(0);
 		
 		// Initialize the symbol tables.
-		this.getServerSymbolTable().clear();
 		this.getSimulatorSymbolTable().clear();
-		
-		this.simulatorSymbolTable.put("/controls/flight/speedbrake", new SimulatorSymbolVariable("/controls/flight/speedbrake", 0.0));
-		this.simulatorSymbolTable.put("/controls/engines/current-engine/throttle", new SimulatorSymbolVariable("/controls/engines/current-engine/throttle", 0.0));
-		this.simulatorSymbolTable.put("/instrumentation/heading-indicator/offset-deg", new SimulatorSymbolVariable("/instrumentation/heading-indicator/offset-deg", 0.0));
-		this.simulatorSymbolTable.put("/instrumentation/airspeed-indicator/indicated-speed-kt", new SimulatorSymbolVariable("/instrumentation/airspeed-indicator/indicated-speed-kt", 0.0));
-		this.simulatorSymbolTable.put("/instrumentation/attitude-indicator/indicated-roll-deg", new SimulatorSymbolVariable("/instrumentation/attitude-indicator/indicated-roll-deg", 0.0));
-		this.simulatorSymbolTable.put("/instrumentation/attitude-indicator/internal-pitch-deg", new SimulatorSymbolVariable("/instrumentation/attitude-indicator/internal-pitch-deg", 0.0));
-		this.simulatorSymbolTable.put("/controls/flight/rudder", new SimulatorSymbolVariable("/controls/flight/rudder", 0.0));
-		this.simulatorSymbolTable.put("/controls/flight/aileron", new SimulatorSymbolVariable("/controls/flight/aileron", 0.0));
-		this.simulatorSymbolTable.put("/controls/flight/elevator", new SimulatorSymbolVariable("/controls/flight/elevator", 0.0));
-		this.simulatorSymbolTable.put("/instrumentation/altimeter/indicated-altitude-ft", new SimulatorSymbolVariable("/instrumentation/altimeter/indicated-altitude-ft", 0.0));
-		
-		
-		// Initialize the simulator variables
-		this.getSimulatorSymbolTable().put("simX", new SimulatorSymbolVariable("simX", 0.0));
-		this.getSimulatorSymbolTable().put("simY", new SimulatorSymbolVariable("simY", 0.0));
-		this.getSimulatorSymbolTable().put("simZ", new SimulatorSymbolVariable("simZ", 0.0));
+		this.getServerSymbolTable().clear();
 	}
 	
 	public double interpret(String[] code) {
-		reset();
 		ArrayList<String[]> tokens = useLexer(code);
 		parse(tokens);
 		
