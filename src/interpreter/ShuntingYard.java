@@ -11,22 +11,116 @@ import math_expressions.Div;
 
 public class ShuntingYard {
 
-	// This method converts an infix expression to a postfix expression.
-	private static String convertInfixToPostfix(List<String> expression, HashMap<String, Variable> varMap) {
+	// Returns true if the received string's value is double
+	public static boolean isParsableToDouble(String str) {
+		try {
+			Double.parseDouble(str);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
 
-		Stack<String> stack = new Stack<String>();
-		Queue<String> queue = new LinkedList<String>();
-		ArrayList<String> expressionTokens = new ArrayList<String>(expression);
+	// Returns variable from the Interpeter's symbolTable
+	private static Variable getVariable(String name, HashMap<String, Variable> symbolTable) {
+		return symbolTable.get(name);
+	}
 
-		replaceVars(expressionTokens, varMap);
-		deleteOperators(expressionTokens);
-		checkMinuses(expressionTokens);
+	// Remove operators from the received array
+	private static void removeOperators(ArrayList<String> split) {
+		for (int i = 0; i < split.size(); i++) {
+			if (Arrays.asList("+", "-").contains(split.get(i))) {
+				int cnt = 1;
+				int startIndex = i;
+				boolean flag = !split.get(i++).equals("-"); // True if equals to +
 
-		for (int i = 0; i < expressionTokens.size(); i++) {
-			if (isParsableToDouble(expressionTokens.get(i))) {
-				queue.add(expressionTokens.get(i));
+				while (Arrays.asList("+", "-").contains(split.get(i))) {
+					if (flag && split.get(i).equals("-")) {
+						flag = false;
+					} // +- -+
+					else if (!flag && split.get(i).equals("-")) {
+						flag = true;
+					} // --
+					cnt++;
+					i++;
+				}
+
+				for (int j = 0; j < cnt; j++) {
+					split.remove(startIndex);
+				}
+
+				if (startIndex == 0 || split.get(startIndex - 1).equals("(")
+						|| Arrays.asList("*", "/").contains(split.get(startIndex - 1))) {
+					if (!flag)
+						split.add(startIndex, "-");
+				} else
+					split.add(startIndex, flag ? "+" : "-");
+			}
+		}
+	}
+
+	// Checks & deals with minuses
+	private static void checkMinuses(List<String> split) {
+		for (int i = 0; i < split.size(); i++) {
+			if (split.get(i).equals("-")) {
+				// Checks if (-) is in the beginning
+				if (i == 0) {
+					split.remove(i);
+					split.set(0, "-" + split.get(0));
+				} else if (Arrays.asList("*", "/", "(").contains(split.get(i - 1))) {
+					split.remove(i);
+					split.set(i, "-" + split.get(i));
+				}
+			}
+		}
+	}
+
+	// Replaces variables with variables's double value
+	private static void replaceVariables(List<String> list, HashMap<String, Variable> symbolTable) {
+		Variable v;
+		for (int i = 0; i < list.size(); i++) {
+			if ((v = getVariable(list.get(i), symbolTable)) != null) {
+				if (v.calculate() >= 0)
+					list.set(i, String.valueOf(v.calculate()));
+				else {
+					list.add(i++, "-");
+					list.set(i, String.valueOf(-v.calculate()));
+				}
+			}
+		}
+	}
+
+	// Creates from in-fix string expression into post-fix string expression
+	private static String infixToPostfix(List<String> split, HashMap<String, Variable> symbolTable) {
+
+		Stack<String> stack = new Stack<>();
+		Queue<String> queue = new LinkedList<>();
+		ArrayList<String> splitStr = new ArrayList<>(split);
+
+		replaceVariables(splitStr, symbolTable);
+		removeOperators(splitStr);
+		checkMinuses(splitStr);
+
+		for (int i = 0; i < splitStr.size(); i++) {
+			if (isParsableToDouble(splitStr.get(i))) {
+				queue.add(splitStr.get(i));
 			} else {
-				switch (expressionTokens.get(i)) {
+				switch (splitStr.get(i)) {
+				case "/":
+				case "*":
+					while (!stack.isEmpty() && (!stack.peek().equals("("))
+							&& (!stack.peek().equals("+") && (!stack.peek().equals("-")))) {
+						queue.add(stack.pop());
+					}
+					stack.push(splitStr.get(i));
+					break;
+				case "+":
+				case "-":
+					while (!stack.isEmpty() && (!stack.peek().equals("("))) {
+						queue.add(stack.pop());
+					}
+					stack.push(splitStr.get(i));
+					break;
 				case "(":
 					stack.push("(");
 					break;
@@ -34,38 +128,8 @@ public class ShuntingYard {
 					while (!stack.isEmpty() && (!stack.peek().equals("("))) {
 						queue.add(stack.pop());
 					}
-					
 					if (!stack.isEmpty())
 						stack.pop();
-					
-					break;
-				case "/":
-					while (!stack.isEmpty() && (!stack.peek().equals("("))
-							&& (!stack.peek().equals("+") && (!stack.peek().equals("-")))) {
-						queue.add(stack.pop());
-					}
-					
-					stack.push(expressionTokens.get(i));
-				case "*":
-					while (!stack.isEmpty() && (!stack.peek().equals("("))
-							&& (!stack.peek().equals("+") && (!stack.peek().equals("-")))) {
-						queue.add(stack.pop());
-					}
-					
-					stack.push(expressionTokens.get(i));
-					break;
-				case "+":
-					while (!stack.isEmpty() && (!stack.peek().equals("("))) {
-						queue.add(stack.pop());
-					}
-					
-					stack.push(expressionTokens.get(i));
-					break;
-				case "-":
-					while (!stack.isEmpty() && (!stack.peek().equals("("))) {
-						queue.add(stack.pop());
-					}
-					stack.push(expressionTokens.get(i));
 					break;
 				}
 			}
@@ -75,154 +139,47 @@ public class ShuntingYard {
 			queue.add(stack.pop());
 		}
 
-		StringBuilder stringBuilder = new StringBuilder();
-		
-		for (String str : queue)
-			stringBuilder.append(str).append(",");
-		
-		return stringBuilder.toString();
-	}
-	
-	private static void deleteOperators(ArrayList<String> expressionTokens) {
-		
-		final String ADD = "+";
-		final String SUB = "-";
-		final String MUL = "*";
-		final String DIV = "/";
-		final List<String> ADD_SUB = Arrays.asList(ADD, SUB);
-		final List<String> MUL_DIV = Arrays.asList(MUL, DIV);
-		
-		for (int i = 0; i < expressionTokens.size(); i++) {
-			if (ADD_SUB.contains(expressionTokens.get(i))) {
-				int counter = 1;
-				int startIndex = i;
-				boolean flag = !expressionTokens.get(i++).equals(SUB); // True if equals to +
-
-				while (ADD_SUB.contains(expressionTokens.get(i))) {
-					if (flag && expressionTokens.get(i).equals(SUB)) {
-						flag = false;
-					} // +- -+
-					else if (!flag && expressionTokens.get(i).equals(SUB)) {
-						flag = true;
-					} // --
-					counter++;
-					i++;
-				}
-
-				for (int j = 0; j < counter; j++) {
-					expressionTokens.remove(startIndex);
-				}
-
-				if (startIndex == 0 || expressionTokens.get(startIndex - 1).equals("(")
-						|| MUL_DIV.contains(expressionTokens.get(startIndex - 1))) {
-					if (!flag)
-						expressionTokens.add(startIndex, SUB);
-				} else
-					expressionTokens.add(startIndex, flag ? ADD : SUB);
-			}
+		StringBuilder sb = new StringBuilder();
+		for (String str : queue) {
+			sb.append(str).append(",");
 		}
-		
+		return sb.toString();
 	}
 
-	// This method deals with minuses appearing in the expressions.
-	private static void checkMinuses(ArrayList<String> expressionTokens) {
-		
-		final List<String> BLOCKING_SYMBOLS = Arrays.asList("*", "/", "(");
-		
-		for (int i = 0; i < expressionTokens.size(); i++) {
-			if (expressionTokens.get(i).equals("-")) {
-				
-				// Checks if the minus appears in the beginning
-				if (i == 0) {
-					
-					// If it does add a 0 to the calculation
-					expressionTokens.remove(i);
-					expressionTokens.set(0, "-" + expressionTokens.get(0));
-				} else if (BLOCKING_SYMBOLS.contains(expressionTokens.get(i - 1))) {
-					
-					// Otherwise, check if one of the blocking symbols appear right before it.
-					expressionTokens.remove(i);
-					expressionTokens.set(i, "-" + expressionTokens.get(i));
-				}
-			}
-		}
-	}
-
-	private static void replaceVars(ArrayList<String> expressionTokens, HashMap<String, Variable> varMap) {
-		Variable var;
-		String key;
-		
-		for (int i = 0; i < expressionTokens.size(); i++) {
-			key = expressionTokens.get(i);
-			var = varMap.get(key);
-			if (var != null) {
-				if (var.calculate() >= 0)
-					expressionTokens.set(i, String.valueOf(var.calculate()));
-				else {
-					expressionTokens.add(i++, "-");
-					expressionTokens.set(i, String.valueOf(-var.calculate()));
-				}
-			}
-		}
-	}
-	
-	// This method checks if a string represents a double
-	// typed number.
-	public static boolean isParsableToDouble(String str) {
-		try {
-	         Double num = Double.valueOf(str);
-	         
-	      }catch (NumberFormatException ex) {
-	         return false;
-	      }
-		
-		return true;
-	}
-	
-	// This method gets the infix expression, converts it to postfix form
-	// creates an expression object from it and executes the code.
-	public static double run(ArrayList<String> exp, HashMap<String, Variable> symbolTable) {
-		String postFixExpression = convertInfixToPostfix(exp, symbolTable);
-		return (runPostfixExpression(postFixExpression));
-	}
-	
 	// Calculate post-fix string expression
-	private static double runPostfixExpression(String postfix) {
-		Stack<Expression> expressionStack = new Stack<>();
+	private static double calculatePostfix(String postfix) {
+		Stack<Expression> stackExp = new Stack<>();
 		String[] expressions = postfix.split(",");
-		Expression right;
-		Expression left;
-		
-		// Go through all the the expressions after splitting them.
-		for (String cur : expressions) {
-			
-			// If the expression represents a number, push it as a number object back to the stack.
-			if (isParsableToDouble(cur)) {
-				expressionStack.push(new Number(Double.parseDouble(cur)));
-			} else {
-				
-				// Otherwise, it must be a binary expression which means a conversion
-				// to whatever type of expression it is is needed.
-				right = expressionStack.pop();
-				left = expressionStack.pop();
 
-				switch (cur) {
+		for (String str : expressions) {
+			if (isParsableToDouble(str)) {
+				stackExp.push(new Number(Double.parseDouble(str)));
+			} else {
+				Expression right = stackExp.pop();
+				Expression left = stackExp.pop();
+
+				switch (str) {
 				case "+":
-					expressionStack.add(new Plus(left, right));
+					stackExp.add(new Plus(left, right));
 					break;
 				case "-":
-					expressionStack.add(new Minus(left, right));
+					stackExp.add(new Minus(left, right));
 					break;
 				case "*":
-					expressionStack.add(new Mul(left, right));
+					stackExp.add(new Mul(left, right));
 					break;
 				case "/":
-					expressionStack.add(new Div(left, right));
+					stackExp.add(new Div(left, right));
 					break;
 				}
 			}
 		}
-		
-		return Math.floor(expressionStack.pop().calculate() * 1000) / 1000;
+		return Math.floor(stackExp.pop().calculate() * 1000) / 1000;
+	}
+
+	// Executes the Shunting-Yard algorithm
+	public static double run(List<String> expression, HashMap<String, Variable> symbolTable) {
+		String postFixExpression = infixToPostfix(expression, symbolTable);
+		return (calculatePostfix(postFixExpression));
 	}
 }
