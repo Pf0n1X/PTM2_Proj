@@ -1,9 +1,12 @@
 package commands;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import interpreter.Interpreter;
 import interpreter.ShuntingYard;
 import math_expressions.CommandExpression;
+import math_expressions.SimulatorSymbolVariable;
 
 public abstract class ConditionParser extends Command {
 	
@@ -32,6 +35,15 @@ public abstract class ConditionParser extends Command {
 		
 		// Get the interpreter.
 		Interpreter inter = this.getInterpreter();
+		
+		// Reset the variables from the server
+		HashMap<String, SimulatorSymbolVariable> simVars = inter.getSimulatorSymbolTable();
+		
+		for (String key: simVars.keySet()) {
+			SimulatorSymbolVariable var = simVars.get(key);
+			var.setVal(ConnectCommand.get("get " + key));
+		}
+		
 		
 		// Set the block index from which to start.
 		this.setTokenBlockIndexBeginning(inter.getTokenBlockIndex());
