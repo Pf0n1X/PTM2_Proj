@@ -1,6 +1,8 @@
 package commands;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -80,5 +82,27 @@ public class ConnectCommand extends Command {
 			serverPrinter.println(line);
 			serverPrinter.flush();
 		}
+	}
+	
+	public static Double get(String line) {
+		
+		// Send the command to the server.
+		// The command template is "get x" with x being the simulator variable name.
+		send(line);
+		
+		// Read the answer/
+		try {
+			BufferedReader reader = new BufferedReader(new InputStreamReader(server.getInputStream()));
+			String serverLine;
+			
+			while (!(serverLine = reader.readLine()).contains(line)) {
+				String retVal = serverLine.substring(serverLine.indexOf("'") + 1, serverLine.lastIndexOf("'"));
+				return Double.parseDouble(!retVal.isEmpty() ? retVal : "0");
+			}
+		} catch (IOException error) {
+			error.printStackTrace();
+		}
+		
+		return null;
 	}
 }
